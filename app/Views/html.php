@@ -277,11 +277,8 @@
         </div>
 
         <div class="heroe">
-
             <h1>Welcome to CodeIgniter <?= CodeIgniter\CodeIgniter::CI_VERSION ?></h1>
-
             <h2>The small framework with powerful features</h2>
-
         </div>
 
     </header>
@@ -297,13 +294,14 @@
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="4">DAFTAR HOBI</th>
+                    <th colspan="5">DAFTAR HOBI</th>
                 </tr>
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
                     <th>Address</th>
                     <th>Hobi</th>
+                    <th>Tim</th>
                 </tr>
             </thead>
             <tbody>
@@ -312,30 +310,42 @@
                     <td>John</td>
                     <td>Australia</td>
                     <td>Biker</td>
+                    <td>Jeni</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>Camping</td>
+                    <td>Michael</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>Jogging</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>2</td>
                     <td>Doe</td>
                     <td>England</td>
                     <td>Reading</td>
+                    <td>Alan</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>Sports</td>
+                    <td>Mattew</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Ian</td>
                 </tr>
             </tbody>
         </table>
@@ -360,32 +370,32 @@
                     <td rowspan="3">1</td>
                     <td rowspan="3">John</td>
                     <td rowspan="3">Australia</td>
-                    <td rowspan="">Biker</td>
-                    <td rowspan="">Jeni</td>
+                    <td>Biker</td>
+                    <td>Jeni</td>
                 </tr>
                 <tr>
-                    <td rowspan="">Camping</td>
-                    <td rowspan="">Michael</td>
+                    <td>Camping</td>
+                    <td>Michael</td>
                 </tr>
                 <tr>
-                    <td rowspan="">Jogging</td>
-                    <td rowspan=""></td>
+                    <td>Jogging</td>
+                    <td></td>
                 </tr>
 
                 <tr>
                     <td rowspan="3">2</td>
                     <td rowspan="3">Doe</td>
                     <td rowspan="3">England</td>
-                    <td rowspan="">Reading</td>
-                    <td rowspan="">Alan</td>
+                    <td>Reading</td>
+                    <td>Alan</td>
                 </tr>
                 <tr>
-                    <td rowspan="">Sports</td>
-                    <td rowspan="">Mattew</td>
+                    <td>Sports</td>
+                    <td>Mattew</td>
                 </tr>
                 <tr>
-                    <td rowspan=""></td>
-                    <td rowspan="">Ian</td>
+                    <td></td>
+                    <td>Ian</td>
                 </tr>
             </tbody>
         </table>
@@ -396,20 +406,14 @@
 
     <footer>
         <div class="environment">
-
             <p>Page rendered in {elapsed_time} seconds</p>
-
             <p>Environment: <?= ENVIRONMENT ?></p>
-
         </div>
 
         <div class="copyrights">
-
             <p>&copy; <?= date('Y') ?> CodeIgniter Foundation. CodeIgniter is open source project released under the MIT
                 open source licence.</p>
-
         </div>
-
     </footer>
 
     <!-- SCRIPTS -->
