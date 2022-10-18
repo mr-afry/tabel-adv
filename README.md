@@ -1,5 +1,9 @@
 # CodeIgniter 4
 
+## Target
+
+![Alt text](https://github.com/mr-afry/tabel-adv/blob/master/public/tabel.png?raw=true "Target")
+
 ## Data User
 
     Array
@@ -142,7 +146,3 @@
             )
 
     )
-
-## Target
-
-![Alt text](https://github.com/mr-afry/tabel-adv/blob/master/public/tabel.png?raw=true "Target")
