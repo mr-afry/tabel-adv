@@ -403,7 +403,7 @@
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="5">DAFTAR HOBI 1.1.1</th>
+                    <th colspan="5">DAFTAR HOBI 1.1.1 Data Manual</th>
                 </tr>
                 <tr>
                     <th>No</th>
