@@ -414,6 +414,21 @@
             </thead>
             <tbody>
                 <?php
+                $tes = $this->db->query("SELECT
+                                            a.user_id, 
+                                            a.user_name, 
+                                            a.user_address,
+                                            b.hobi_name
+                                        FROM
+                                            `user` a
+                                            LEFT JOIN
+                                            (SELECT * FROM hobi) b
+                                            ON b.user_id=a.user_id")->getResultArray();
+                echo '<pre>';
+                print_r($tes);
+                echo '</pre>';
+                die;
+
                 $data2 = [
                     0 => [
                         "id" => "1",
