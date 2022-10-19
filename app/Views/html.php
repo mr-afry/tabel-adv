@@ -294,7 +294,7 @@
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="5">DAFTAR HOBI</th>
+                    <th colspan="5">DAFTAR HOBI TARGET 1</th>
                 </tr>
                 <tr>
                     <th>No</th>
@@ -355,7 +355,176 @@
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="5">DAFTAR HOBI</th>
+                    <th colspan="5">DAFTAR HOBI 1.1</th>
+                </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Address</th>
+                    <th>Hobi</th>
+                    <th>Tim</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $this->db = \Config\Database::connect();
+                $datauser = $this->db->query("SELECT * FROM user ORDER BY user_id ASC")->getResultArray();
+                $no = 1;
+                foreach ($datauser as $u) :
+                    // $count = count($datauser);
+                    // $i = 0;
+
+                    $user_id = $u['user_id'];
+                    $datahobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$user_id' ORDER BY user_id ASC")->getResultArray();
+                    foreach ($datahobi as $h) :
+
+                        // $datatim = $this->db->query("SELECT * FROM tim WHERE user_id = '$user_id' ORDER BY user_id ASC")->getResultArray();
+                        // foreach ($datatim as $t) :
+                ?>
+                        <tr>
+                            <td><?= $no; ?></td>
+                            <td><?= $u['user_name']; ?></td>
+                            <td><?= $u['user_address']; ?></td>
+                            <td><?= $h['hobi_name']; ?></td>
+                            <td><? //= $t['tim_name']; 
+                                ?></td>
+                        </tr>
+                <?php
+                    // endforeach;
+                    endforeach;
+                    $no++;
+                endforeach;
+                ?>
+            </tbody>
+        </table>
+
+        <br><br>
+
+        <table id="hobi">
+            <thead>
+                <tr>
+                    <th colspan="5">DAFTAR HOBI 1.1.1</th>
+                </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Address</th>
+                    <th>Hobi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $data2 = [
+                    0 => [
+                        "id" => "1",
+                        "user_id" => "1",
+                        "user_name" => "Tomi",
+                        "user_address" => "Jakarta",
+                        "user_hobi" => ["Masak", "Joging", "Olahraga"]
+                    ],
+                    1 => [
+                        "id" => 4,
+                        "user_id" => 2,
+                        "user_name" => "Roni",
+                        "user_address" => "Medan",
+                        "user_hobi" => ["Mancing", "Bersepeda", "Olahraga"]
+                    ],
+                    3 => [
+                        "id" => 7,
+                        "user_id" => 3,
+                        "user_name" => "Imam",
+                        "user_address" => "Aceh",
+                        "user_hobi" => ["Joging", "Membaca", "Berenang"]
+                    ]
+                ];
+
+                $no = 1;
+                foreach ($data2 as $u) :
+                    $count = count($u['user_hobi']);
+                    $i = 0;
+                ?>
+                    <tr>
+                        <?php if ($i == 0) : ?>
+                            <td rowspan="<?= $count; ?>"><?= $no; ?></td>
+                            <td rowspan="<?= $count; ?>"><?= $u['user_name']; ?></td>
+                            <td rowspan="<?= $count; ?>"><?= $u['user_address']; ?></td>
+                        <?php endif; ?>
+                        <?php
+                        foreach ($u['user_hobi'] as $h) :
+                        ?>
+                            <td rowspan=""><?= $h; ?></td>
+                    </tr>
+            <?php
+                        endforeach;
+                        $no++;
+                    endforeach;
+            ?>
+            </tbody>
+        </table>
+
+        <br><br>
+
+        <table id="hobi">
+            <thead>
+                <tr>
+                    <th colspan="4">DAFTAR HOBI 1.2</th>
+                </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Address</th>
+                    <th>Hobi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $this->db = \Config\Database::connect();
+                $datauser = $this->db->query("SELECT * FROM user ORDER BY user_id ASC")->getResultArray();
+                $no = 1;
+                ?>
+                <?php
+                $user_id = $u['user_id'];
+                foreach ($datauser as $u) :
+                    $count = $this->db->query("SELECT
+                                a.user_id,
+                                a.user_name,
+                                a.user_address,
+                                b.countTim,
+                                c.countHobi,
+                                (SELECT GREATEST(b.countTim,c.countHobi)) as count
+                            FROM
+                                USER AS a
+                                LEFT JOIN ( SELECT b.user_id, count( b.user_id ) countTim FROM tim AS b GROUP BY b.user_id ) AS b ON a.user_id = b.user_id
+                                LEFT JOIN ( SELECT c.user_id, count( c.user_id ) countHobi FROM hobi AS c GROUP BY c.user_id ) AS c ON a.user_id = c.user_id
+                            WHERE
+                                a.user_id = '$user_id'")->getRowArray();
+                    $i = 0;
+                ?>
+                    <?php
+                    $datahobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$user_id' ORDER BY user_id ASC")->getResultArray();
+                    foreach ($datahobi as $h) :
+                    ?>
+                        <tr>
+                            <?php if ($i == 0) : ?>
+                                <td rowspan="<?= $count['count']; ?>"><?= $no; ?></td>
+                                <td rowspan="<?= $count['count']; ?>"><?= $u['user_name']; ?></td>
+                                <td rowspan="<?= $count['count']; ?>"><?= $u['user_address']; ?></td>
+                            <?php endif; ?>
+                            <td rowspan="1"><?= $h['hobi_name']; ?></td>
+                            <td rowspan="1"><?= $h['hobi_name']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php $no++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <br><br>
+
+        <table id="hobi">
+            <thead>
+                <tr>
+                    <th colspan="5">DAFTAR HOBI 2</th>
                 </tr>
                 <tr>
                     <th>No</th>

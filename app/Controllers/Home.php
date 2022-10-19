@@ -14,16 +14,14 @@ class Home extends BaseController
 
     public function index()
     {
-        $data['user'] = $this->db->query("SELECT * FROM user")->getResultArray();
-        $data['hobi'] = $this->db->query("SELECT * FROM hobi")->getResultArray();
-        $data['tim'] = $this->db->query("SELECT * FROM tim")->getResultArray();
-
+        $data['user'] = $this->db->query("SELECT * FROM user ORDER BY user_id ASC")->getResultArray();
+        $data['hobi'] = $this->db->query("SELECT * FROM hobi ORDER BY user_id ASC")->getResultArray();
+        $data['tim'] = $this->db->query("SELECT * FROM tim ORDER BY user_id ASC")->getResultArray();
         return view('welcome_message', $data);
     }
 
     public function excell()
     {
-        $user = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user");
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -37,24 +35,36 @@ class Home extends BaseController
         $sheet->setCellValue('C2', 'Alamat');
         $sheet->setCellValue('D2', 'Hobi');
 
+        $user = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user ORDER BY user.user_id ASC");
         $no = 1;
         $x = 3;
-        foreach ($user->getResult() as $u) :
-            $sheet->setCellValue('A' . $x, $no);
-            $sheet->setCellValue('B' . $x, $u->user_name);
-            $sheet->setCellValue('C' . $x, $u->user_address);
+        foreach ($user->getResultArray() as $u) :
+            $user_id = $u['user_id'];
+            $hobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$user_id' ORDER BY user_id ASC");
+            // $count = count($hobi->getResultArray());
 
-            $hobi = $this->db->query("SELECT * FROM hobi WHERE user_id = $u->user_id");
-            $y = 3;
-            foreach ($hobi->getResult() as $h) :
-                $sheet->setCellValue('D' . $y, $h->hobi_name);
-                $y++;
+            $y = 0;
+            foreach ($hobi->getResultArray() as $h) :
+                // $sheet->setCellValue('A' . $x, $x . '-' . $no);
+                // $sheet->setCellValue('B' . $x, $u['user_name']);
+                // $sheet->setCellValue('C' . $x, $u['user_address']);
+                // $sheet->setCellValue('D' . $x, $h['hobi_name']);
+                echo '<table>';
+                echo '<tr>';
+                if ($y == 0) :
+                    echo '<td rowspan="' . $y . '">' . $no . '</td>';
+                    echo '<td rowspan="' . $y . '">' . $x . $u['user_name'] . '</td>';
+                    echo '<td rowspan="' . $y . '">' . $x . $u['user_address'] . '</td>';
+                    echo '<td rowspan="' . $y . '">' . $x . $h['hobi_name'] . '</td>';
+                    echo '</tr>';
+                    echo '</table>';
+                endif;
             endforeach;
 
             $x++;
             $no++;
         endforeach;
-
+        die;
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Hobi.xlsx"');
         header('Cache-Control: max-age=0');
@@ -66,7 +76,6 @@ class Home extends BaseController
     public function html()
     {
         $data['user'] = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user");
-
         return view('html', $data);
     }
 }
