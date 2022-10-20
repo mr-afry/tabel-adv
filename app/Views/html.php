@@ -410,52 +410,92 @@
                     <th>Nama</th>
                     <th>Address</th>
                     <th>Hobi</th>
+                    <th>Tim</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $tes = $this->db->query("SELECT
-                                            a.user_id, 
-                                            a.user_name, 
-                                            a.user_address,
-                                            b.hobi_name
-                                        FROM
-                                            `user` a
-                                            LEFT JOIN
-                                            (SELECT * FROM hobi) b
-                                            ON b.user_id=a.user_id")->getResultArray();
+                $tes = $this->db->query("SELECT a.user_id, a.user_name, a.user_address FROM user a")->getResultArray();
+                foreach ($tes as $key => $val) :
+                    $tes1 = $this->db->query("SELECT b.hobi_name FROM hobi b wHERE b.user_id = '$val[user_id]'")->getResultArray();
+                    $tes2 = $this->db->query("SELECT c.tim_name FROM tim c wHERE c.user_id = '$val[user_id]'")->getResultArray();
+
+                    $tes1 = array_column($tes1, 'hobi_name');
+                    $tes2 = array_column($tes2, 'tim_name');
+
+                    $dataarr = [
+                        'user_id' => $val['user_id'],
+                        'user_name' => $val['user_name'],
+                        'user_address' => $val['user_address'],
+                        'user_hobi' => $tes1,
+                        'user_tim' => $tes2
+                    ];
+                    $data[] = $dataarr;
+                endforeach;
                 echo '<pre>';
-                print_r($tes);
+                print_r($data);
                 echo '</pre>';
-                die;
 
                 $data2 = [
                     0 => [
-                        "id" => "1",
                         "user_id" => "1",
                         "user_name" => "Tomi",
                         "user_address" => "Jakarta",
                         "user_hobi" => ["Masak", "Joging", "Olahraga"]
                     ],
                     1 => [
-                        "id" => 4,
                         "user_id" => 2,
                         "user_name" => "Roni",
                         "user_address" => "Medan",
-                        "user_hobi" => ["Mancing", "Bersepeda", "Olahraga"]
+                        "user_hobi" => [
+                            "Mancing",
+                            "Bersepeda",
+                            "Olahraga"
+                        ]
                     ],
                     3 => [
-                        "id" => 7,
                         "user_id" => 3,
                         "user_name" => "Imam",
                         "user_address" => "Aceh",
-                        "user_hobi" => ["Joging", "Membaca", "Berenang"]
-                    ]
+                        "user_hobi" => [
+                            "Joging",
+                            "Membaca",
+                            "Berenang"
+                        ]
+                    ],
+                    // 3 => [
+                    //     "id" => 7,
+                    //     "user_id" => 3,
+                    //     "user_name" => "Imam",
+                    //     "user_address" => "Aceh",
+                    //     "user_hobi" => [
+                    //         [
+                    //             "hobi_name" => "Joging"
+                    //         ],
+                    //         [
+                    //             "hobi_name" => "Membaca"
+                    //         ],
+                    //         [
+                    //             "hobi_name" => "Berenang"
+                    //         ]
+                    //     ]
+                    // ]
                 ];
 
+                echo '<pre>';
+                print_r($data2);
+                echo '</pre>';
+
                 $no = 1;
-                foreach ($data2 as $u) :
+                foreach ($data as $u) :
                     $count = count($u['user_hobi']);
+                    // $count1 = count($u['user_hobi']);
+                    // $count2 = count($u['user_tim']);
+                    // if ($count1 > $count2) :
+                    //     $count = $count1;
+                    // else :
+                    //     $count = $count2;
+                    // endif;
                     $i = 0;
                 ?>
                     <tr>
@@ -464,15 +504,13 @@
                             <td rowspan="<?= $count; ?>"><?= $u['user_name']; ?></td>
                             <td rowspan="<?= $count; ?>"><?= $u['user_address']; ?></td>
                         <?php endif; ?>
-                        <?php
-                        foreach ($u['user_hobi'] as $h) :
-                        ?>
+                        <?php foreach ($u['user_hobi'] as $h) : ?>
                             <td rowspan=""><?= $h; ?></td>
                     </tr>
+                <?php endforeach; ?>
             <?php
-                        endforeach;
-                        $no++;
-                    endforeach;
+                    $no++;
+                endforeach;
             ?>
             </tbody>
         </table>
