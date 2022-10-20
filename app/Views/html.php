@@ -403,14 +403,14 @@
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="5">DAFTAR HOBI 1.1.1 Data Manual</th>
+                    <th colspan="4">DAFTAR HOBI 1.1.1 Data Manual</th>
                 </tr>
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
                     <th>Address</th>
                     <th>Hobi</th>
-                    <th>Tim</th>
+                    <!-- <th>Tim</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -458,7 +458,6 @@
                         "user_name" => "Imam",
                         "user_address" => "Aceh",
                         "user_hobi" => [
-                            "Joging",
                             "Membaca",
                             "Berenang"
                         ]
@@ -481,21 +480,14 @@
                     //     ]
                     // ]
                 ];
-
                 echo '<pre>';
                 print_r($data2);
                 echo '</pre>';
 
+
                 $no = 1;
                 foreach ($data as $u) :
                     $count = count($u['user_hobi']);
-                    // $count1 = count($u['user_hobi']);
-                    // $count2 = count($u['user_tim']);
-                    // if ($count1 > $count2) :
-                    //     $count = $count1;
-                    // else :
-                    //     $count = $count2;
-                    // endif;
                     $i = 0;
                 ?>
                     <tr>
@@ -620,6 +612,101 @@
                     <td>Ian</td>
                 </tr>
             </tbody>
+        </table>
+        <br><br><br>
+
+        <table id="hobi">
+            <tr>
+                <th colspan="7">Contoh</th>
+            </tr>
+            <tr>
+                <th>No</th>
+                <th>Data</th>
+                <th>Data 2</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Sub Total</th>
+                <th>Total</th>
+            </tr>
+            <?php
+            // $source1 = $this->db->query("SELECT distinct data1 FROM tables")->getResultArray();
+            $source1 = $this->db->query("SELECT data1 FROM tables GROUP BY data1")->getResultArray();
+            print_r($source1);
+            $no = 1;
+            foreach ($source1 as $source1) { ?>
+                <tr>
+                    <?php
+                    $source2 = $this->db->query("SELECT data2, qty, price, (qty*price) as sub FROM tables WHERE data1='$source1[data1]'");
+                    $total_source2 = count($source2->getResultArray());
+                    $source3 = $source2->getResultArray();
+                    $rowspan = true;
+                    ?>
+                    <td rowspan="<?php echo $total_source2 ?>"><?php echo $no; ?></td>
+                    <td rowspan="<?php echo $total_source2 ?>"><?php echo $source1['data1']; ?></td>
+                    <?php foreach ($source3 as $source3) { ?>
+                        <td><?php echo $source3['data2'] ?></td>
+                        <td><?php echo $source3['qty'] ?></td>
+                        <td><?php echo $source3['price'] ?></td>
+                        <td><?php echo $source3['sub'] ?></td>
+                        <?php
+                        if ($rowspan) {
+                            $q = $this->db->query("SELECT SUM(qty*price) as nb FROM tables WHERE data1 = '$source1[data1]'");
+                            echo "<td rowspan='{$total_source2}'>" . $q->getRow()->nb . '</td>';
+                            $rowspan = false;
+                        }
+                        ?>
+                </tr>
+            <?php } ?>
+        <?php $no++;
+            } ?>
+        </table>
+        <br><br><br>
+
+        <table id="hobi">
+            <tr>
+                <th colspan="7">Department</th>
+            </tr>
+            <tr>
+                <th>Department ID</th>
+                <th>Salary</th>
+            </tr>
+            <?php
+            $record = $this->db->query("SELECT distinct department_id from departemen");
+            $no = 1;
+            foreach ($record->getResult() as $r) :
+                $datasama = $this->db->query("SELECT * from departemen where department_id='$r->department_id'");
+                $jml = count($datasama->getResultArray());
+            ?>
+
+                <tr>
+                    <?php if ($jml > 1) : ?>
+                        <td rowspan="<?php echo $jml ?>"><?php echo $r->department_id; ?></td>
+                        <?php
+                        $nox = 1;
+                        foreach ($datasama->getResult() as $dt) :
+                        ?>
+                            <td><?php echo $dt->salary ?></td>
+                </tr>
+
+
+                <?php if ($nox < $jml) : ?>
+                    <tr>
+                    <?php endif; ?>
+                    <?php $nox++; ?>
+                <?php
+                        endforeach;
+                    else :
+                        foreach ($datasama->getResult() as $dt) :
+                ?>
+                    <td><?php echo $r->department_id; ?></td>
+                    <td><?php echo $dt->salary ?></td>
+            <?php endforeach;
+                    endif;
+            ?>
+                    </tr>
+                <?php $no++;
+            endforeach;
+                ?>
         </table>
 
     </section>
