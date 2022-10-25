@@ -349,7 +349,20 @@
                     <td></td>
                     <td>Ian</td>
                 </tr>
-
+            </tbody>
+            <thead>
+                <tr>
+                    <th colspan="5">DAFTAR HOBI TARGET 1</th>
+                </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Address</th>
+                    <th>Hobi</th>
+                    <th>Tim</th>
+                </tr>
+            </thead>
+            <tbody>
                 <?php
                 $user = $this->db->query("SELECT * FROM user")->getResultArray();
                 $no = 1;
@@ -358,22 +371,38 @@
                     <?php $hobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$u[user_id]' ORDER BY user_id ASC")->getResultArray(); ?>
                     <?php $jmlhobi = count($hobi); ?>
 
-                    <?php foreach ($hobi as $h) : ?>
-                        <?php if ($jmlhobi > 1) : ?>
-                            <tr>
-                                <td><?= $no; ?></td>
-                                <td><?= $u['user_name']; ?></td>
-                                <td><?= $u['user_address']; ?></td>
-                                <td><?= $h['hobi_name']; ?></td>
-                            </tr>
-                        <?php else : ?>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><?= $h['hobi_name']; ?></td>
-                            </tr>
-                        <?php endif; ?>
+                    <?php foreach ($hobi as $key => $h) : ?>
+                        <?php $tim = $this->db->query("SELECT * FROM tim WHERE user_id = '$u[user_id]' ORDER BY user_id ASC")->getResultArray(); ?>
+                        <?php $jmltim = count($tim); ?>
+
+                        <?php foreach ($tim as $key1 => $t) : ?>
+                            <?php if ($jmlhobi == 1) : ?>
+                                <tr>
+                                    <td><?= $no; ?></td>
+                                    <td><?= $u['user_name']; ?></td>
+                                    <td><?= $u['user_address']; ?></td>
+                                    <td><?= $h['hobi_name']; ?></td>
+                                    <td><?= $t['tim_name']; ?></td>
+                                </tr>
+                            <?php else : ?>
+                                <?php if ($key == 0) : ?>
+                                    <tr>
+                                        <td><?= $no; ?></td>
+                                        <td><?= $u['user_name']; ?></td>
+                                        <td><?= $u['user_address']; ?></td>
+                                        <td><?= $h['hobi_name']; ?></td>
+                                        <td><?= $t['tim_name']; ?></td>
+                                    </tr>
+                                <?php else : ?>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><?= $h['hobi_name']; ?></td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
 
                     <?php $no++; ?>
