@@ -1,3 +1,4 @@
+<?php $this->db = \Config\Database::connect(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -291,6 +292,7 @@
         <b><a href="/home/html">CETAK HTML</a></b>
         <br><br><br>
 
+        <!-- DAFTAR HOBI TARGET 1 -->
         <table id="hobi">
             <thead>
                 <tr>
@@ -347,11 +349,41 @@
                     <td></td>
                     <td>Ian</td>
                 </tr>
+
+                <?php
+                $user = $this->db->query("SELECT * FROM user")->getResultArray();
+                $no = 1;
+                ?>
+                <?php foreach ($user as $u) : ?>
+                    <?php $hobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$u[user_id]' ORDER BY user_id ASC")->getResultArray(); ?>
+                    <?php $jmlhobi = count($hobi); ?>
+
+                    <?php foreach ($hobi as $h) : ?>
+                        <?php if ($jmlhobi > 1) : ?>
+                            <tr>
+                                <td><?= $no; ?></td>
+                                <td><?= $u['user_name']; ?></td>
+                                <td><?= $u['user_address']; ?></td>
+                                <td><?= $h['hobi_name']; ?></td>
+                            </tr>
+                        <?php else : ?>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><?= $h['hobi_name']; ?></td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+
+                    <?php $no++; ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
 
         <br><br>
 
+        <!-- DAFTAR HOBI 1.1 -->
         <table id="hobi">
             <thead>
                 <tr>
@@ -367,39 +399,43 @@
             </thead>
             <tbody>
                 <?php
-                $this->db = \Config\Database::connect();
-                $datauser = $this->db->query("SELECT * FROM user ORDER BY user_id ASC")->getResultArray();
+                $datauser = $this->db->query("SELECT * FROM user GROUP BY user_id")->getResultArray();
                 $no = 1;
                 foreach ($datauser as $u) :
-                    // $count = count($datauser);
-                    // $i = 0;
 
                     $user_id = $u['user_id'];
                     $datahobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$user_id' ORDER BY user_id ASC")->getResultArray();
-                    foreach ($datahobi as $h) :
+                    $count = count($datahobi);
+                    $i = 0;
+                    print_r($count);
+                ?>
+                    <tr>
+                        <?php
+                        // if ($count < 1) :
+                        ?>
+                        <td rowspan=""><?= $no; ?></td>
+                        <td rowspan=""><?= $u['user_name']; ?></td>
+                        <td rowspan=""><?= $u['user_address']; ?></td>
+                        <td></td>
+                        <?php
+                        foreach ($datahobi as $h) :
+                        ?>
+                    </tr>
+                    <?php
+                            // endif;
+                    ?>
 
-                        // $datatim = $this->db->query("SELECT * FROM tim WHERE user_id = '$user_id' ORDER BY user_id ASC")->getResultArray();
-                        // foreach ($datatim as $t) :
-                ?>
-                        <tr>
-                            <td><?= $no; ?></td>
-                            <td><?= $u['user_name']; ?></td>
-                            <td><?= $u['user_address']; ?></td>
-                            <td><?= $h['hobi_name']; ?></td>
-                            <td><? //= $t['tim_name']; 
-                                ?></td>
-                        </tr>
-                <?php
-                    // endforeach;
+            <?php
+                        endforeach;
+                        $no++;
                     endforeach;
-                    $no++;
-                endforeach;
-                ?>
+            ?>
             </tbody>
         </table>
 
         <br><br>
 
+        <!-- DAFTAR HOBI 1.1.1 Data Manual -->
         <table id="hobi">
             <thead>
                 <tr>
@@ -486,7 +522,7 @@
 
 
                 $no = 1;
-                foreach ($data as $u) :
+                foreach ($data2 as $u) :
                     $count = count($u['user_hobi']);
                     $i = 0;
                 ?>
@@ -509,6 +545,7 @@
 
         <br><br>
 
+        <!-- DAFTAR HOBI 1.2 -->
         <table id="hobi">
             <thead>
                 <tr>
@@ -566,6 +603,7 @@
 
         <br><br>
 
+        <!-- DAFTAR HOBI 2 -->
         <table id="hobi">
             <thead>
                 <tr>
@@ -613,8 +651,9 @@
                 </tr>
             </tbody>
         </table>
-        <br><br><br>
+        <br><br>
 
+        <!-- Contoh -->
         <table id="hobi">
             <tr>
                 <th colspan="7">Contoh</th>
@@ -660,8 +699,9 @@
         <?php $no++;
             } ?>
         </table>
-        <br><br><br>
+        <br><br>
 
+        <!-- Department -->
         <table id="hobi">
             <tr>
                 <th colspan="7">Department</th>
@@ -689,7 +729,7 @@
                 </tr>
 
 
-                <?php if ($nox < $jml) : ?>
+                <?php if ($jml == 1) : ?>
                     <tr>
                     <?php endif; ?>
                     <?php $nox++; ?>

@@ -10,6 +10,7 @@ class Home extends BaseController
     public function __construct()
     {
         $this->db = \Config\Database::connect();
+        $this->parser = \Config\Services::parser();
     }
 
     public function index()
@@ -77,5 +78,9 @@ class Home extends BaseController
     {
         $data['user'] = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user");
         return view('html', $data);
+        // $data = [
+        //     'user' => $this->db->query("SELECT * FROM user")->getResultArray()
+        // ];
+        // return $this->parser->setData($data)->render('html');
     }
 }
