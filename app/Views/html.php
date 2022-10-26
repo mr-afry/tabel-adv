@@ -376,32 +376,32 @@
                         <?php $jmltim = count($tim); ?>
 
                         <?php foreach ($tim as $key1 => $t) : ?>
-                            <?php if ($jmlhobi == 1) : ?>
-                                <tr>
-                                    <td><?= $no; ?></td>
-                                    <td><?= $u['user_name']; ?></td>
-                                    <td><?= $u['user_address']; ?></td>
-                                    <td><?= $h['hobi_name']; ?></td>
-                                    <td><?= $t['tim_name']; ?></td>
-                                </tr>
-                            <?php else : ?>
-                                <?php if ($key == 0) : ?>
-                                    <tr>
-                                        <td><?= $no; ?></td>
-                                        <td><?= $u['user_name']; ?></td>
-                                        <td><?= $u['user_address']; ?></td>
-                                        <td><?= $h['hobi_name']; ?></td>
-                                        <td><?= $t['tim_name']; ?></td>
-                                    </tr>
-                                <?php else : ?>
-                                    <tr>
+                            <!-- < ?php if ($jmlhobi == 1) : ?> -->
+                            <tr>
+                                <td><?= $no; ?></td>
+                                <td><?= $u['user_name']; ?></td>
+                                <td><?= $u['user_address']; ?></td>
+                                <td><?= $h['hobi_name']; ?></td>
+                                <td><?= $t['tim_name']; ?></td>
+                            </tr>
+                            <!-- < ?php else : ?>
+                                < ?php if ($key == 0) : ?> -->
+                            <!-- <tr>
+                                        <td>< ?= $no; ?></td>
+                                        <td>< ?= $u['user_name']; ?></td>
+                                        <td>< ?= $u['user_address']; ?></td>
+                                        <td>< ?= $h['hobi_name']; ?></td>
+                                        <td>< ?= $t['tim_name']; ?></td>
+                                    </tr> -->
+                            <!-- < ?php else : ?> -->
+                            <!-- <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td><?= $h['hobi_name']; ?></td>
-                                    </tr>
-                                <?php endif; ?>
-                            <?php endif; ?>
+                                        <td>< ?= $h['hobi_name']; ?></td>
+                                    </tr> -->
+                            <!-- < ?php endif; ?> -->
+                            <!-- < ?php endif; ?> -->
                         <?php endforeach; ?>
                     <?php endforeach; ?>
 
@@ -412,6 +412,348 @@
 
         <br><br>
 
+
+        <table id="hobi">
+            <thead>
+                <tr>
+                    <th colspan="5">DAFTAR HOBI TARGET 1</th>
+                </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Address</th>
+                    <th>Hobi</th>
+                    <th>Tim</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John</td>
+                    <td>Australia</td>
+                    <td>Biker</td>
+                    <td>Jeni</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Camping</td>
+                    <td>Michael</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Jogging</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Doe</td>
+                    <td>England</td>
+                    <td>Reading</td>
+                    <td>Alan</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Sports</td>
+                    <td>Mattew</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Ian</td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th colspan="5">DAFTAR HOBI TARGET 1 kkkkkkkkkkkkkkkkkkkk</th>
+                </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Address</th>
+                    <th>Hobi</th>
+                    <th>Tim</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $user = $this->db->query("SELECT * FROM user")->getResultArray();
+                $no = 1;
+
+                $list = array();
+
+                function getHobby($uid)
+                {
+                    $db = \Config\Database::connect();
+                    return $db->query("SELECT * FROM hobi WHERE user_id = '$uid' ORDER BY user_id ASC")->getResultArray();
+                }
+
+                function getTeam($uid)
+                {
+                    $db = \Config\Database::connect();
+                    return $db->query("SELECT * FROM tim WHERE user_id = '$uid' ORDER BY user_id ASC")->getResultArray();
+                }
+
+                function getArrHobby($index, $dHobi)
+                {
+                    if (count($dHobi) != 0 && $index >= count($dHobi) - 1) {
+                        return $dHobi[$index]['hobi_name'];
+                    }
+                    return '';
+                }
+
+                function getArrTeam($index, $dTeam)
+                {
+                    if (count($dTeam) != 0 && $index >= count($dTeam) - 1) {
+                        return $dTeam[$index]['tim_name'];
+                    }
+                    return '';
+                }
+
+                function _print_row($row_data)
+                {
+                    $index0 = $row_data;
+                    $loop = 0;
+                    foreach ($row_data as $frows) {
+                        $hl = $frows['hobi_list'];
+                        $tl = $frows['tim_list'];
+                        $countList = count($hl) > count($tl) ? count($hl) : count($tl);
+                        echo
+                        "<tr>
+                            <td>" . ($frows['no']) . "</td>
+                            <td>" . ($frows['name']) . "</td>
+                            <td>" . ($frows['address']) . "</td>
+                            <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
+                            <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
+                        </tr>";
+
+
+                        if (count($hl) > count($tl)) {
+                            for ($j = 1; $j < count($hl); $j++) {
+                                echo
+                                "<tr>
+                                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                                </tr>";
+                            }
+                        } else {
+                            for ($j = 1; $j < count($tl); $j++) {
+                                echo
+                                "<tr>
+                                    <td>" . "</td>
+                                    <td>" . "</td>
+                                    <td>" . "</td>
+                                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                                </tr>";
+                            }
+                        }
+                    }
+                }
+                ?>
+
+                <?php
+
+                foreach ($user as $u) {
+                    $row = array();
+                    $row['no'] = $no;
+                    $row['name'] = $u['user_name'];
+                    $row['address'] = $u['user_address'];
+                    $row['hobi_list'] = getHobby($u['user_id']);
+                    $row['tim_list'] = getTeam($u['user_id']);
+                    $list[] = $row;
+                    $no++;
+                }
+
+                _print_row($list);
+                echo "<pre>";
+                print_r($list);
+                echo "</pre>";
+                ?>
+
+                <!-- < ?php $hobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$u[user_id]' ORDER BY user_id ASC")->getResultArray(); ?>
+                    < ?php $jmlhobi = count($hobi); ?> -->
+
+                <!-- < ?php foreach ($hobi as $key => $h) : ?>
+                        < ?php $tim = $this->db->query("SELECT * FROM tim WHERE user_id = '$u[user_id]' ORDER BY user_id ASC")->getResultArray(); ?>
+                        < ?php $jmltim = count($tim); ?> -->
+
+                <!-- < ?php foreach ($tim as $key1 => $t) : ?> -->
+                <!-- < ?php if ($jmlhobi == 1) : ?> -->
+                <!-- <tr>
+                                <td>< ?= $no; ?></td>
+                                <td>< ?= $u['user_name']; ?></td>
+                                <td>< ?= $u['user_address']; ?></td>
+                                <td>< ?= $h['hobi_name']; ?></td>
+                                <td>< ?= $t['tim_name']; ?></td>
+                            </tr> -->
+
+                <!-- < ?php else : ?>
+                                < ?php if ($key == 0) : ?> -->
+                <!-- <tr>
+                                        <td>< ?= $no; ?></td>
+                                        <td>< ?= $u['user_name']; ?></td>
+                                        <td>< ?= $u['user_address']; ?></td>
+                                        <td>< ?= $h['hobi_name']; ?></td>
+                                        <td>< ?= $t['tim_name']; ?></td>
+                                    </tr> -->
+                <!-- < ?php else : ?> -->
+                <!-- <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>< ?= $h['hobi_name']; ?></td>
+                                    </tr> -->
+                <!-- < ?php endif; ?> -->
+                <!-- < ?php endif; ?> -->
+                <!-- < ?php endforeach; ?>
+                    < ?php endforeach; ?>
+
+                        < ?php $no++; ?>
+                            < ?php endforeach; ?> -->
+            </tbody>
+            <thead>
+                <tr>
+                    <th colspan="5">DAFTAR HOBI TARGET 1 kkkkkkkkkkkkkkkkkkkk</th>
+                </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Address</th>
+                    <th>Hobi</th>
+                    <th>Tim</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $user = $this->db->query("SELECT * FROM user")->getResultArray();
+                $no = 1;
+
+                $list = array();
+
+                function getHobby1($uid)
+                {
+                    $db = \Config\Database::connect();
+                    return $db->query("SELECT * FROM hobi WHERE user_id = '$uid' ORDER BY user_id ASC")->getResultArray();
+                }
+
+                function getTeam1($uid)
+                {
+                    $db = \Config\Database::connect();
+                    return $db->query("SELECT * FROM tim WHERE user_id = '$uid' ORDER BY user_id ASC")->getResultArray();
+                }
+
+                function _print_row1($row_data)
+                {
+                    $index0 = $row_data;
+                    $loop = 0;
+                    foreach ($row_data as $frows) {
+                        $hl = $frows['hobi_list'];
+                        $tl = $frows['tim_list'];
+                        $countList = count($hl) > count($tl) ? count($hl) : count($tl);
+                        echo
+                        "<tr>
+                            <td rowspan='" . $countList . "'>" . ($frows['no']) . "</td>
+                            <td rowspan='" . $countList . "'>" . ($frows['name']) . "</td>
+                            <td rowspan='" . $countList . "'>" . ($frows['address']) . "</td>
+                            <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
+                            <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
+                        </tr>";
+
+
+                        if (count($hl) > count($tl)) {
+                            for ($j = 1; $j < count($hl); $j++) {
+                                echo
+                                "<tr>";
+                                echo "<td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>";
+
+                                echo "</tr>";
+                            }
+                        } else {
+                            for ($j = 1; $j < count($tl); $j++) {
+                                echo
+                                "<tr>
+                                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                                </tr>";
+                            }
+                        }
+                    }
+                }
+                ?>
+
+                <?php
+
+                foreach ($user as $u) {
+                    $row = array();
+                    $row['no'] = $no;
+                    $row['name'] = $u['user_name'];
+                    $row['address'] = $u['user_address'];
+                    $row['hobi_list'] = getHobby1($u['user_id']);
+                    $row['tim_list'] = getTeam1($u['user_id']);
+                    $list[] = $row;
+                    $no++;
+                }
+
+                _print_row1($list);
+                echo "<pre>";
+                // print_r($list);
+                echo "</pre>";
+                ?>
+
+
+                <!-- < ?php $hobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$u[user_id]' ORDER BY user_id ASC")->getResultArray(); ?>
+                    < ?php $jmlhobi = count($hobi); ?> -->
+
+                <!-- < ?php foreach ($hobi as $key => $h) : ?>
+                        < ?php $tim = $this->db->query("SELECT * FROM tim WHERE user_id = '$u[user_id]' ORDER BY user_id ASC")->getResultArray(); ?>
+                        < ?php $jmltim = count($tim); ?> -->
+
+                <!-- < ?php foreach ($tim as $key1 => $t) : ?> -->
+                <!-- < ?php if ($jmlhobi == 1) : ?> -->
+                <!-- <tr>
+                                <td>< ?= $no; ?></td>
+                                <td>< ?= $u['user_name']; ?></td>
+                                <td>< ?= $u['user_address']; ?></td>
+                                <td>< ?= $h['hobi_name']; ?></td>
+                                <td>< ?= $t['tim_name']; ?></td>
+                            </tr> -->
+
+                <!-- < ?php else : ?>
+                                < ?php if ($key == 0) : ?> -->
+                <!-- <tr>
+                                        <td>< ?= $no; ?></td>
+                                        <td>< ?= $u['user_name']; ?></td>
+                                        <td>< ?= $u['user_address']; ?></td>
+                                        <td>< ?= $h['hobi_name']; ?></td>
+                                        <td>< ?= $t['tim_name']; ?></td>
+                                    </tr> -->
+                <!-- < ?php else : ?> -->
+                <!-- <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>< ?= $h['hobi_name']; ?></td>
+                                    </tr> -->
+                <!-- < ?php endif; ?> -->
+                <!-- < ?php endif; ?> -->
+                <!-- < ?php endforeach; ?>
+                    < ?php endforeach; ?>
+
+                        < ?php $no++; ?>
+                            < ?php endforeach; ?> -->
+            </tbody>
+        </table>
+
+        </br></br>
         <!-- DAFTAR HOBI 1.1 -->
         <table id="hobi">
             <thead>
