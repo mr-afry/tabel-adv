@@ -289,7 +289,8 @@
     <section>
         <b><a href="/">HOME</a></b>&nbsp;&nbsp;&nbsp;&nbsp;
         <b><a href="/home/excell">CETAK EXCELL</a></b>&nbsp;&nbsp;&nbsp;&nbsp;
-        <b><a href="/home/html">CETAK HTML</a></b>
+        <b><a href="/home/html">CETAK HTML</a></b>&nbsp;&nbsp;&nbsp;&nbsp;
+        <b><a href="/home/htmlfinal">CETAK HTML FINAL</a></b>
         <br><br><br>
 
         <!-- DAFTAR HOBI TARGET 1 -->

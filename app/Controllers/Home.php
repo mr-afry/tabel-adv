@@ -83,4 +83,10 @@ class Home extends BaseController
         // ];
         // return $this->parser->setData($data)->render('html');
     }
+
+    public function htmlfinal()
+    {
+        $data['user'] = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user");
+        return view('html-final', $data);
+    }
 }

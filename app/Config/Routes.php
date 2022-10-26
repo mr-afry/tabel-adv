@@ -41,6 +41,8 @@ $routes->get('/excell', 'Home::excell');
 $routes->get('/home/excell', 'Home::excell');
 $routes->get('/html', 'Home::html');
 $routes->get('/home/html', 'Home::html');
+$routes->get('/htmlfinal', 'Home::htmlfinal');
+$routes->get('/home/htmlfinal', 'Home::htmlfinal');
 
 /*
  * --------------------------------------------------------------------
