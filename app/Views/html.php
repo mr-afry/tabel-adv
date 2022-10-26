@@ -414,6 +414,7 @@
 
 
         <table id="hobi">
+            <!-- Part 1 -->
             <thead>
                 <tr>
                     <th colspan="5">DAFTAR HOBI TARGET 1</th>
@@ -470,9 +471,10 @@
                     <td>Ian</td>
                 </tr>
             </tbody>
+            <!-- Part 2 -->
             <thead>
                 <tr>
-                    <th colspan="5">DAFTAR HOBI TARGET 1 kkkkkkkkkkkkkkkkkkkk</th>
+                    <th colspan="5">DAFTAR HOBI TARGET 1 yyyyyyyyyyyyyyy</th>
                 </tr>
                 <tr>
                     <th>No</th>
@@ -619,6 +621,7 @@
                         < ?php $no++; ?>
                             < ?php endforeach; ?> -->
             </tbody>
+            <!-- Part 3 -->
             <thead>
                 <tr>
                     <th colspan="5">DAFTAR HOBI TARGET 1 kkkkkkkkkkkkkkkkkkkk</th>
@@ -633,10 +636,7 @@
             </thead>
             <tbody>
                 <?php
-                $user = $this->db->query("SELECT * FROM user")->getResultArray();
-                $no = 1;
-
-                $list = array();
+                // $user = $this->db->query("SELECT * FROM user")->getResultArray();
 
                 function getHobby1($uid)
                 {
@@ -652,8 +652,8 @@
 
                 function _print_row1($row_data)
                 {
-                    $index0 = $row_data;
-                    $loop = 0;
+                    // $index0 = $row_data;
+                    // $loop = 0;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];
@@ -691,7 +691,8 @@
                 ?>
 
                 <?php
-
+                $list = array();
+                $no = 1;
                 foreach ($user as $u) {
                     $row = array();
                     $row['no'] = $no;
@@ -705,7 +706,7 @@
 
                 _print_row1($list);
                 echo "<pre>";
-                // print_r($list);
+                print_r($list);
                 echo "</pre>";
                 ?>
 
