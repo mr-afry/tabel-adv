@@ -7,6 +7,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Home extends BaseController
 {
+    protected $db;
+    protected $parser;
+
     public function __construct()
     {
         $this->db = \Config\Database::connect();
@@ -38,33 +41,101 @@ class Home extends BaseController
 
         $user = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user ORDER BY user.user_id ASC");
         $no = 1;
-        $x = 3;
         foreach ($user->getResultArray() as $u) :
-            $user_id = $u['user_id'];
-            $hobi = $this->db->query("SELECT * FROM hobi WHERE user_id = '$user_id' ORDER BY user_id ASC");
-            // $count = count($hobi->getResultArray());
-
-            $y = 0;
-            foreach ($hobi->getResultArray() as $h) :
-                // $sheet->setCellValue('A' . $x, $x . '-' . $no);
-                // $sheet->setCellValue('B' . $x, $u['user_name']);
-                // $sheet->setCellValue('C' . $x, $u['user_address']);
-                // $sheet->setCellValue('D' . $x, $h['hobi_name']);
-                echo '<table>';
-                echo '<tr>';
-                if ($y == 0) :
-                    echo '<td rowspan="' . $y . '">' . $no . '</td>';
-                    echo '<td rowspan="' . $y . '">' . $x . $u['user_name'] . '</td>';
-                    echo '<td rowspan="' . $y . '">' . $x . $u['user_address'] . '</td>';
-                    echo '<td rowspan="' . $y . '">' . $x . $h['hobi_name'] . '</td>';
-                    echo '</tr>';
-                    echo '</table>';
-                endif;
-            endforeach;
-
-            $x++;
+            $row['no'] = $no;
+            $row['name'] = $u['user_name'];
+            $row['address'] = $u['user_address'];
+            $row['user_hobi'] = $this->userhobi($u['user_id']);
+            $row['user_tim'] = $this->usertim($u['user_id']);
+            $list[] = $row;
             $no++;
         endforeach;
+
+        // echo "<pre>";
+        // print_r($list);
+        // echo "</pre>";
+
+        echo "<table border='1'>";
+        $x = 1;
+        foreach ($list as $frows) {
+            $hl = $frows['user_hobi'];
+            $tl = $frows['user_tim'];
+            echo
+            "<tr>
+            <td>" . $frows['no'] . "</td>
+            <td>" . $frows['name'] . "</td>
+            <td>" . $frows['address'] . "</td>
+            <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
+            <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
+            </tr>";
+
+            // Second Row ...
+            if (count($hl) > count($tl)) {
+                // Jml Hobi > Jml Tim
+                for ($j = 1; $j < count($hl); $j++) {
+                    echo
+                    "<tr>
+                    <td>" . "</td>
+                    <td>" . "</td>
+                    <td>" . "</td>
+                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                    </tr>";
+                }
+            } else {
+                // Jml Hobi < Jml Tim
+                for ($j = 1; $j < count($tl); $j++) {
+                    echo
+                    "<tr>
+                    <td>" . "</td>
+                    <td>" . "</td>
+                    <td>" . "</td>
+                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                    </tr>";
+                }
+            }
+            $x++;
+        }
+        echo "</table>";
+        echo "<br><br>";
+
+        echo "<table border='1'>";
+        foreach ($list as $frows) {
+            $hl = $frows['user_hobi'];
+            $tl = $frows['user_tim'];
+            $countList = count($hl) > count($tl) ? count($hl) : count($tl);
+            echo
+            "<tr>
+                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
+                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
+                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
+                <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
+                <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
+            </tr>";
+
+            // Second Row ...
+            if (count($hl) > count($tl)) {
+                // Jml Hobi > Jml Tim
+                for ($j = 1; $j < count($hl); $j++) {
+                    echo
+                    "<tr>
+                        <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                        <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                    </tr>";
+                }
+            } else {
+                // Jml Hobi < Jml Tim
+                for ($j = 1; $j < count($tl); $j++) {
+                    echo
+                    "<tr>
+                        <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                        <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                    </tr>";
+                }
+            }
+        }
+        echo "</table>";
         die;
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Hobi.xlsx"');
@@ -72,6 +143,16 @@ class Home extends BaseController
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         exit();
+    }
+
+    public function userhobi($uid)
+    {
+        return $this->db->query("SELECT * FROM hobi WHERE user_id = '$uid' ORDER BY user_id ASC")->getResultArray();
+    }
+
+    public function usertim($uid)
+    {
+        return $this->db->query("SELECT * FROM tim WHERE user_id = '$uid' ORDER BY user_id ASC")->getResultArray();
     }
 
     public function html()

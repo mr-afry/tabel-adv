@@ -43,6 +43,7 @@
         #hobi th {
             border: 1px solid #ddd;
             padding: 8px;
+            vertical-align: top;
         }
 
         #hobi th {
@@ -293,67 +294,6 @@
         <b><a href="/home/htmlfinal">CETAK HTML FINAL</a></b>
         <br><br><br>
 
-        <table id="hobi">
-            <!-- Part 1 -->
-            <thead>
-                <tr>
-                    <th colspan="5">DAFTAR HOBI TARGET 1</th>
-                </tr>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Address</th>
-                    <th>Hobi</th>
-                    <th>Tim</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>John</td>
-                    <td>Australia</td>
-                    <td>Biker</td>
-                    <td>Jeni</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Camping</td>
-                    <td>Michael</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Jogging</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Doe</td>
-                    <td>England</td>
-                    <td>Reading</td>
-                    <td>Alan</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Sports</td>
-                    <td>Mattew</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Ian</td>
-                </tr>
-            </tbody>
-        </table>
-        <br><br>
-
         <!-- Part 2 -->
         <table id="hobi">
             <thead>
@@ -451,7 +391,6 @@
                 <?php
 
                 foreach ($user as $u) {
-                    // $row = array();
                     $row['no'] = $no;
                     $row['name'] = $u['user_name'];
                     $row['address'] = $u['user_address'];
@@ -460,9 +399,9 @@
                     $list[] = $row;
                     $no++;
                 }
-                echo "<pre>";
-                print_r($list);
-                echo "</pre>";
+                // echo "<pre>";
+                // print_r($list);
+                // echo "</pre>";
 
                 _print_row($list);
 
@@ -476,14 +415,14 @@
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="5">DAFTAR HOBI WITH ROWSPAN</th>
+                    <th colspan="7">DAFTAR HOBI WITH ROWSPAN</th>
                 </tr>
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
                     <th>Address</th>
-                    <th>Hobi</th>
-                    <th>Tim</th>
+                    <th colspan="2">Hobi</th>
+                    <th colspan="2">Tim</th>
                 </tr>
             </thead>
             <tbody>
@@ -504,18 +443,19 @@
 
                 function _print_row1($row_data)
                 {
-                    // $index0 = $row_data;
-                    // $loop = 0;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];
                         $countList = count($hl) > count($tl) ? count($hl) : count($tl);
+                        // countlist = 0, will tells the browser to span the cell to the last row of the table section 
                         echo
                         "<tr>
-                            <td rowspan='" . $countList . "'>" . ($frows['no']) . "</td>
-                            <td rowspan='" . $countList . "'>" . ($frows['name']) . "</td>
-                            <td rowspan='" . $countList . "'>" . ($frows['address']) . "</td>
+                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
+                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
+                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
+                            <td>" . (count($hl) > 0 ? $hl[0]['hobi_id'] : '') . "</td>
                             <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
+                            <td>" . (count($tl) > 0 ? $tl[0]['tim_id'] : '') . "</td>
                             <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
                         </tr>";
 
@@ -523,17 +463,20 @@
                         if (count($hl) > count($tl)) {
                             for ($j = 1; $j < count($hl); $j++) {
                                 echo
-                                "<tr>";
-                                echo "<td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>";
-
-                                echo "</tr>";
+                                "<tr>
+                                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_id'] : '') . "</td>
+                                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_id'] : '') . "</td>
+                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                                </tr>";
                             }
                         } else {
                             for ($j = 1; $j < count($tl); $j++) {
                                 echo
                                 "<tr>
+                                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_id'] : '') . "</td>
                                     <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_id'] : '') . "</td>
                                     <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
                                 </tr>";
                             }
@@ -543,30 +486,31 @@
                 ?>
 
                 <?php
-                $list = array();
                 $no = 1;
                 foreach ($user1 as $u) {
-                    $row = array();
                     $row['no'] = $no;
                     $row['name'] = $u['user_name'];
                     $row['address'] = $u['user_address'];
                     $row['hobi_list'] = getHobby1($u['user_id']);
                     $row['tim_list'] = getTeam1($u['user_id']);
-                    $list[] = $row;
+                    $list1[] = $row;
                     $no++;
                 }
+                echo "<pre>";
+                print_r($list1);
+                echo "</pre>";
 
-                _print_row1($list);
+                _print_row1($list1);
                 ?>
             </tbody>
         </table>
         <br><br>
 
-        <!-- DAFTAR HOBI TARGET 1 -->
+        <!-- DAFTAR HOBI NEXT TEMPLATE STYLE EXPERIMENT -->
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="5">DAFTAR HOBI TARGET 1</th>
+                    <th colspan="5">DAFTAR HOBI EXPERIMENT STYLE</th>
                 </tr>
                 <tr>
                     <th>No</th>
