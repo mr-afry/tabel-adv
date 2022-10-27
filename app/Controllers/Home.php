@@ -105,6 +105,7 @@ class Home extends BaseController
             $hl = $frows['user_hobi'];
             $tl = $frows['user_tim'];
             $countList = count($hl) > count($tl) ? count($hl) : count($tl);
+            // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section 
             echo
             "<tr>
                 <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>

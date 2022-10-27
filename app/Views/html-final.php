@@ -447,7 +447,7 @@
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];
                         $countList = count($hl) > count($tl) ? count($hl) : count($tl);
-                        // countlist = 0, will tells the browser to span the cell to the last row of the table section 
+                        // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section 
                         echo
                         "<tr>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
