@@ -27,17 +27,17 @@ class Home extends BaseController
     public function excell()
     {
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'DAFTAR HOBI');
-        $sheet->mergeCells('A1:D1');
-        $sheet->getStyle('A1:D2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A1:D2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('A1:D2')->getFont()->setBold(true);
-        $sheet->setCellValue('A2', 'No');
-        $sheet->setCellValue('B2', 'Nama');
-        $sheet->setCellValue('C2', 'Alamat');
-        $sheet->setCellValue('D2', 'Hobi');
+        // $spreadsheet = new Spreadsheet();
+        // $sheet = $spreadsheet->getActiveSheet();
+        // $sheet->setCellValue('A1', 'DAFTAR HOBI');
+        // $sheet->mergeCells('A1:D1');
+        // $sheet->getStyle('A1:D2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        // $sheet->getStyle('A1:D2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        // $sheet->getStyle('A1:D2')->getFont()->setBold(true);
+        // $sheet->setCellValue('A2', 'No');
+        // $sheet->setCellValue('B2', 'Nama');
+        // $sheet->setCellValue('C2', 'Alamat');
+        // $sheet->setCellValue('D2', 'Hobi');
 
         $user = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user ORDER BY user.user_id ASC");
         $no = 1;
@@ -55,89 +55,158 @@ class Home extends BaseController
         // print_r($list);
         // echo "</pre>";
 
-        echo "<table border='1'>";
-        $x = 1;
-        foreach ($list as $frows) {
-            $hl = $frows['user_hobi'];
-            $tl = $frows['user_tim'];
-            echo
-            "<tr>
-            <td>" . $frows['no'] . "</td>
-            <td>" . $frows['name'] . "</td>
-            <td>" . $frows['address'] . "</td>
-            <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
-            <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
-            </tr>";
+        // echo "<table border='1'>";
+        // $x = 1;
+        // foreach ($list as $frows) {
+        //     $hl = $frows['user_hobi'];
+        //     $tl = $frows['user_tim'];
+        //     echo
+        //     "<tr>
+        //     <td>" . $frows['no'] . "</td>
+        //     <td>" . $frows['name'] . "</td>
+        //     <td>" . $frows['address'] . "</td>
+        //     <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
+        //     <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
+        //     </tr>";
 
-            // Second Row ...
-            if (count($hl) > count($tl)) {
-                // Jml Hobi > Jml Tim
-                for ($j = 1; $j < count($hl); $j++) {
-                    echo
-                    "<tr>
-                    <td>" . "</td>
-                    <td>" . "</td>
-                    <td>" . "</td>
-                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
-                    </tr>";
-                }
-            } else {
-                // Jml Hobi < Jml Tim
-                for ($j = 1; $j < count($tl); $j++) {
-                    echo
-                    "<tr>
-                    <td>" . "</td>
-                    <td>" . "</td>
-                    <td>" . "</td>
-                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
-                    </tr>";
-                }
-            }
-            $x++;
-        }
-        echo "</table>";
-        echo "<br><br>";
+        //     // Second Row ...
+        //     if (count($hl) > count($tl)) {
+        //         // Jml Hobi > Jml Tim
+        //         for ($j = 1; $j < count($hl); $j++) {
+        //             echo
+        //             "<tr>
+        //             <td>" . "</td>
+        //             <td>" . "</td>
+        //             <td>" . "</td>
+        //             <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+        //             <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+        //             </tr>";
+        //         }
+        //     } else {
+        //         // Jml Hobi < Jml Tim
+        //         for ($j = 1; $j < count($tl); $j++) {
+        //             echo
+        //             "<tr>
+        //             <td>" . "</td>
+        //             <td>" . "</td>
+        //             <td>" . "</td>
+        //             <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+        //             <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+        //             </tr>";
+        //         }
+        //     }
+        //     $x++;
+        // }
+        // echo "</table>";
+        // echo "<br><br>";
 
-        echo "<table border='1'>";
-        foreach ($list as $frows) {
-            $hl = $frows['user_hobi'];
-            $tl = $frows['user_tim'];
-            $countList = count($hl) > count($tl) ? count($hl) : count($tl);
-            // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section 
-            echo
-            "<tr>
-                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
-                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
-                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
-                <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
-                <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
-            </tr>";
+        $htmlString = $this->_print_row1();
+        // die;
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
+        $spreadsheet = $reader->loadFromString($htmlString);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Hobi.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit();
+    }
 
-            // Second Row ...
-            if (count($hl) > count($tl)) {
-                // Jml Hobi > Jml Tim
-                for ($j = 1; $j < count($hl); $j++) {
-                    echo
-                    "<tr>
-                        <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                        <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
-                    </tr>";
-                }
-            } else {
-                // Jml Hobi < Jml Tim
-                for ($j = 1; $j < count($tl); $j++) {
-                    echo
-                    "<tr>
-                        <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                        <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
-                    </tr>";
-                }
-            }
-        }
-        echo "</table>";
-        die;
+    function _print_row1()
+    {
+        // echo "<table>";
+        // foreach ($row_data as $frows) {
+        //     $hl = $frows['user_hobi'];
+        //     $tl = $frows['user_tim'];
+        //     $countList = count($hl) > count($tl) ? count($hl) : count($tl);
+        //     // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section 
+        //     echo
+        //     "<tr>
+        //         <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
+        //         <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
+        //         <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
+        //         <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
+        //         <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
+        //     </tr>";
+
+        //     // Second Row ...
+        //     if (count($hl) > count($tl)) {
+        //         // Jml Hobi > Jml Tim
+        //         for ($j = 1; $j < count($hl); $j++) {
+        //             echo
+        //             "<tr>
+        //                 <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+        //                 <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+        //             </tr>";
+        //         }
+        //     } else {
+        //         // Jml Hobi < Jml Tim
+        //         for ($j = 1; $j < count($tl); $j++) {
+        //             echo
+        //             "<tr>
+        //                 <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+        //                 <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+        //             </tr>";
+        //         }
+        //     }
+        // }
+        // echo "</table>";
+    }
+
+    public function excell1()
+    {
+        $htmlString = '<table id="hobi">
+                            <thead>
+                                <tr>
+                                    <th colspan="5">DAFTAR HOBI 2</th>
+                                </tr>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Address</th>
+                                    <th>Hobi</th>
+                                    <th>Tim</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="3">1</td>
+                                    <td rowspan="3">John</td>
+                                    <td rowspan="3">Australia</td>
+                                    <td>Biker</td>
+                                    <td>Jeni</td>
+                                </tr>
+                                <tr>
+                                    <td>Camping</td>
+                                    <td>Michael</td>
+                                </tr>
+                                <tr>
+                                    <td>Jogging</td>
+                                    <td></td>
+                                </tr>
+
+                                <tr>
+                                    <td rowspan="3">2</td>
+                                    <td rowspan="3">Doe</td>
+                                    <td rowspan="3">England</td>
+                                    <td>Reading</td>
+                                    <td>Alan</td>
+                                </tr>
+                                <tr>
+                                    <td>Sports</td>
+                                    <td>Mattew</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Ian</td>
+                                </tr>
+                            </tbody>
+                        </table>';
+
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
+        $spreadsheet = $reader->loadFromString($htmlString);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Hobi.xlsx"');
         header('Cache-Control: max-age=0');

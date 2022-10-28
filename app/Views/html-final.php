@@ -496,9 +496,9 @@
                     $list1[] = $row;
                     $no++;
                 }
-                echo "<pre>";
-                print_r($list1);
-                echo "</pre>";
+                // echo "<pre>";
+                // print_r($list1);
+                // echo "</pre>";
 
                 _print_row1($list1);
                 ?>

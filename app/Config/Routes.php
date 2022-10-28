@@ -39,6 +39,8 @@ $routes->get('/', 'Home::index');
 $routes->get('/home', 'Home::index');
 $routes->get('/excell', 'Home::excell');
 $routes->get('/home/excell', 'Home::excell');
+$routes->get('/excell1', 'Home::excell1');
+$routes->get('/home/excell1', 'Home::excell1');
 $routes->get('/html', 'Home::html');
 $routes->get('/home/html', 'Home::html');
 $routes->get('/htmlfinal', 'Home::htmlfinal');
