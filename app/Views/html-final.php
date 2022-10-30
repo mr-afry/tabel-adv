@@ -290,6 +290,7 @@
     <section>
         <b><a href="/">HOME</a></b>&nbsp;&nbsp;&nbsp;&nbsp;
         <b><a href="/home/excell">CETAK EXCELL</a></b>&nbsp;&nbsp;&nbsp;&nbsp;
+        <b><a href="/home/excellhtml">CETAK EXCELL HTML</a></b>&nbsp;&nbsp;&nbsp;&nbsp;
         <b><a href="/home/html">CETAK HTML</a></b>&nbsp;&nbsp;&nbsp;&nbsp;
         <b><a href="/home/htmlfinal">CETAK HTML FINAL</a></b>
         <br><br><br>
