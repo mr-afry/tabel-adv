@@ -325,15 +325,18 @@
 
                 function _print_row1($row_data)
                 {
-                    // $index0 = $row_data;
-                    // $loop = 0;
+                    // // $index0 = $row_data;
+                    // // $loop = 0;
+                    $endBefore = 0;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];
                         $countList = count($hl) > count($tl) ? count($hl) : count($tl);
+                        $noStart = ($frows['no'] == 1 ? $frows['no'] : $endBefore);
+                        $noEnd = ($frows['no'] == 1 ? $countList : $endBefore + $countList - 1);
                         echo
                         "<tr>
-                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
+                            <td rowspan='" . $countList . "'>" . ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
                             <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
@@ -359,15 +362,16 @@
                                 </tr>";
                             }
                         }
+                        $endBefore = $noEnd + 1;
                     }
                 }
                 ?>
 
                 <?php
-                $list = array();
+                // $list = array();
                 $no = 1;
                 foreach ($user as $u) {
-                    $row = array();
+                    // $row = array();
                     $row['no'] = $no;
                     $row['name'] = $u['user_name'];
                     $row['address'] = $u['user_address'];
