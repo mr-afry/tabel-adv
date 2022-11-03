@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 25, 2022 at 12:21 AM
--- Server version: 10.6.7-MariaDB-log
+-- Generation Time: Nov 03, 2022 at 10:51 AM
+-- Server version: 10.6.8-MariaDB-log
 -- PHP Version: 7.4.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -66,15 +66,18 @@ CREATE TABLE `hobi` (
 --
 
 INSERT INTO `hobi` (`hobi_id`, `hobi_name`, `user_id`) VALUES
-(1, 'Masak', 1),
-(2, 'Olahraga', 1),
-(3, 'Joging', 1),
-(4, 'Mancing', 2),
-(5, 'Bersepeda', 2),
-(6, 'Olahraga', 6),
-(7, 'Joging', 6),
-(8, 'Membaca', 6),
-(9, 'Mabok', 6);
+(1, 'Masak', 5),
+(2, 'Olahraga', 4),
+(3, 'Joging', 4),
+(4, 'Mancing', 4),
+(5, 'Bersepeda', 4),
+(6, 'Olahraga', 8),
+(7, 'Joging', 8),
+(8, 'Membaca', 8),
+(9, 'Mabok', 8),
+(10, 'Turu', 8),
+(11, 'Memancing', 8),
+(12, 'Manjepa', 8);
 
 -- --------------------------------------------------------
 
@@ -120,12 +123,15 @@ CREATE TABLE `tim` (
 --
 
 INSERT INTO `tim` (`tim_id`, `tim_name`, `user_id`) VALUES
-(1, 'Jeni', 1),
-(2, 'Michael', 1),
-(3, 'Dodi', 2),
-(4, 'Bambang', 3),
-(5, 'Ivan', 3),
-(6, 'Lala', 3);
+(1, 'Jeni', 4),
+(2, 'Michael', 4),
+(3, 'Dodi', 4),
+(4, 'Bambang', 4),
+(5, 'Ivan', 8),
+(6, 'Lala', 8),
+(7, 'test', 8),
+(8, 'test 3', 8),
+(9, 'sattu', 8);
 
 -- --------------------------------------------------------
 
@@ -146,7 +152,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`user_id`, `user_name`, `user_address`) VALUES
 (1, 'Tomi', 'Jakarta'),
 (2, 'Roni', 'Medan'),
-(3, 'Imam', 'Aceh');
+(3, 'Imam', 'Aceh'),
+(4, 'Kaco', 'majene');
 
 --
 -- Indexes for dumped tables
@@ -196,7 +203,7 @@ ALTER TABLE `departemen`
 -- AUTO_INCREMENT for table `hobi`
 --
 ALTER TABLE `hobi`
-  MODIFY `hobi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `hobi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tables`
@@ -208,13 +215,13 @@ ALTER TABLE `tables`
 -- AUTO_INCREMENT for table `tim`
 --
 ALTER TABLE `tim`
-  MODIFY `tim_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `tim_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
