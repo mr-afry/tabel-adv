@@ -416,9 +416,10 @@
         <table id="hobi">
             <thead>
                 <tr>
-                    <th colspan="7">DAFTAR HOBI WITH ROWSPAN</th>
+                    <th colspan="8">DAFTAR HOBI WITH ROWSPAN</th>
                 </tr>
                 <tr>
+                    <th>Row</th>
                     <th>No</th>
                     <th>Nama</th>
                     <th>Address</th>
@@ -444,13 +445,21 @@
 
                 function _print_row1($row_data)
                 {
+                    $endBefore = 0;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];
                         $countList = count($hl) > count($tl) ? count($hl) : count($tl);
-                        // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section 
+                        $noStart = ($frows['no'] == 1 ? $frows['no'] : $endBefore);
+                        $noEnd = ($frows['no'] == 1 ? $countList : $endBefore + $countList - 1);
+
+                        // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section      
+                        // echo "<pre>";
+                        // print_r(' No: ' . $frows['no'] . ' Awal: ' . $noStart . ' Akhir: ' . $noEnd);
+                        // echo "</pre>";
                         echo
                         "<tr>
+                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
@@ -482,6 +491,8 @@
                                 </tr>";
                             }
                         }
+
+                        $endBefore = $noEnd + 1;
                     }
                 }
                 ?>

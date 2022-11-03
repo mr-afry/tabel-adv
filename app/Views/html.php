@@ -336,7 +336,7 @@
                         $noEnd = ($frows['no'] == 1 ? $countList : $endBefore + $countList - 1);
                         echo
                         "<tr>
-                            <td rowspan='" . $countList . "'>" . ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) . "</td>
+                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
                             <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>

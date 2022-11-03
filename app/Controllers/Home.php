@@ -18,11 +18,10 @@ class Home extends BaseController
 
     public function index()
     {
-        // $data['user'] = $this->db->query("SELECT * FROM user ORDER BY user_id ASC")->getResultArray();
-        // $data['hobi'] = $this->db->query("SELECT * FROM hobi ORDER BY user_id ASC")->getResultArray();
-        // $data['tim'] = $this->db->query("SELECT * FROM tim ORDER BY user_id ASC")->getResultArray();
-        // return view('welcome_message', $data);
-
+        $data['user'] = $this->db->query("SELECT * FROM user ORDER BY user_id ASC")->getResultArray();
+        $data['hobi'] = $this->db->query("SELECT * FROM hobi ORDER BY user_id ASC")->getResultArray();
+        $data['tim'] = $this->db->query("SELECT * FROM tim ORDER BY user_id ASC")->getResultArray();
+        return view('welcome_message', $data);
     }
 
     public function excell()
