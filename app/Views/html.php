@@ -323,22 +323,44 @@
                     return $db->query("SELECT * FROM tim WHERE user_id = '$uid' ORDER BY user_id ASC")->getResultArray();
                 }
 
+                function getAllData()
+                {
+                    $db = \Config\Database::connect();
+                    return $db->query("SELECT * FROM user as u
+                        LEFT JOIN hobi as h ON h.user_id =  u.user_id
+                        LEFT JOIN tim as t ON t.user_id =  u.user_id
+                        ORDER BY u.user_id ASC")->getResultArray();
+                }
+
                 function _print_row1($row_data)
                 {
                     // // $index0 = $row_data;
                     // // $loop = 0;
                     $endBefore = 0;
+                    $indexStart = 7;
+                    $reIndex = true;
+                    $loopProcess = 1;
+                    $rowspan = true;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];
-                        $countList = count($hl) > count($tl) ? count($hl) : count($tl);
-                        $noStart = ($frows['no'] == 1 ? $frows['no'] : $endBefore);
-                        $noEnd = ($frows['no'] == 1 ? $countList : $endBefore + $countList - 1);
+                        $countList = (count($hl) != 0 && count($tl) != 0 ? (count($hl) > count($tl) ? count($hl) : count($tl)) : 0);
+
+                        if ($reIndex) {
+                            $noStart = ($loopProcess == 1 ? $indexStart : $endBefore);
+                            $noEnd = ($loopProcess == 1 ? ($countList == 0 ? $indexStart : $indexStart + $countList) : ($countList == 0 ? $endBefore : $endBefore + $countList - 1));
+                            $noJadi = ($countList != 0 ? ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) : $noStart);
+                        } else {
+                            $noStart = ($frows['no'] == 1 ? $frows['no'] : $endBefore);
+                            $noEnd = ($frows['no'] == 1 ? ($countList == 0 ? $frows['no'] : $countList) : ($countList == 0 ? $endBefore : $endBefore + $countList - 1));
+                            $noJadi = ($countList != 0 ? ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) : $noStart);
+                        }
+
                         echo
                         "<tr>
-                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) . "</td>
-                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
-                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
+                            <td rowspan='" . ($rowspan ? ($countList != 0 ? $countList : '') : '') . "'>" . $noJadi . "</td>
+                            <td rowspan='" . ($rowspan ? ($countList != 0 ? $countList : '') : '') . "'>" . ($frows['name']) . "</td>
+                            <td rowspan='" . ($rowspan ? ($countList != 0 ? $countList : '') : '') . "'>" . ($frows['address']) . "</td>
                             <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
                             <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>
                         </tr>";
@@ -346,29 +368,31 @@
 
                         if (count($hl) > count($tl)) {
                             for ($j = 1; $j < count($hl); $j++) {
-                                echo
-                                "<tr>";
-                                echo "<td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>";
-
-                                echo "</tr>";
+                                echo "<tr>";
+                                echo ($rowspan ? "<td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                            </tr>" : "<td></td><td></td><td></td><td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                            <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                        </tr>");
                             }
                         } else {
                             for ($j = 1; $j < count($tl); $j++) {
-                                echo
-                                "<tr>
-                                    <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                                    <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
-                                </tr>";
+                                echo "<tr>";
+                                echo ($rowspan ? "<td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                                <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                            </tr>" : "<td></td><td></td><td></td><td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
+                            <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                        </tr>");
                             }
                         }
                         $endBefore = $noEnd + 1;
+                        $loopProcess++;
                     }
                 }
                 ?>
 
                 <?php
-                // $list = array();
+                $list = array();
                 $no = 1;
                 foreach ($user as $u) {
                     // $row = array();
@@ -520,5 +544,3 @@
     <!-- -->
 
 </body>
-
-</html>
