@@ -445,21 +445,61 @@
 
                 function _print_row1($row_data)
                 {
-                    $endBefore = 0;
+                    $loopOfData = 1;
+                    $numberRowStart = 7;
+                    $countRowEachBlock = 0;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];
-                        $countList = count($hl) > count($tl) ? count($hl) : count($tl);
-                        $noStart = ($frows['no'] == 1 ? $frows['no'] : $endBefore);
-                        $noEnd = ($frows['no'] == 1 ? $countList : $endBefore + $countList - 1);
+
+                        // Get CountList
+                        if (count($hl) != 0 && count($tl) != 0) :
+                            if (count($hl) > count($tl)) :
+                                $countList = count($hl);
+                            else :
+                                $countList = count($tl);
+                            endif;
+                        else :
+                            $countList = 0;
+                        endif;
+
+                        // Get First Row Number in Block
+                        if ($loopOfData == 1) :
+                            $firstNumberRow = $numberRowStart;
+                        else :
+                            $firstNumberRow = $countRowEachBlock;
+                        endif;
+
+                        // Get Last Row Number in Block
+                        if ($firstNumberRow == 1) :
+                            if ($countList == 0) :
+                                $lastNumberRow = $numberRowStart;
+                            else :
+                                $lastNumberRow = $numberRowStart + $countList - 1;
+                            endif;
+                        else :
+                            if ($countList == 0) :
+                                $lastNumberRow = $countRowEachBlock;
+                            else :
+                                $lastNumberRow = $countRowEachBlock + $countList - 1;
+                            endif;
+                        endif;
+
+                        // Print row to view
+                        if ($countList != 0) :
+                            if ($firstNumberRow == $lastNumberRow) :
+                                $showRow = $firstNumberRow;
+                            else :
+                                $showRow = $firstNumberRow . '-' . $lastNumberRow;
+                            endif;
+                        else :
+                            $showRow = $firstNumberRow;
+                        endif;
 
                         // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section      
-                        // echo "<pre>";
-                        // print_r(' No: ' . $frows['no'] . ' Awal: ' . $noStart . ' Akhir: ' . $noEnd);
-                        // echo "</pre>";
                         echo
                         "<tr>
-                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) . "</td>
+                            <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . $showRow . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['no']) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['name']) . "</td>
                             <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($frows['address']) . "</td>
@@ -491,8 +531,8 @@
                                 </tr>";
                             }
                         }
-
-                        $endBefore = $noEnd + 1;
+                        $countRowEachBlock = $lastNumberRow + 1;
+                        $loopOfData++;
                     }
                 }
                 ?>
@@ -508,9 +548,6 @@
                     $list1[] = $row;
                     $no++;
                 }
-                // echo "<pre>";
-                // print_r($list1);
-                // echo "</pre>";
 
                 _print_row1($list1);
                 ?>

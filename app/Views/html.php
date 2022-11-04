@@ -337,9 +337,9 @@
                     // // $index0 = $row_data;
                     // // $loop = 0;
                     $endBefore = 0;
-                    $indexStart = 7;
-                    $reIndex = true;
+                    $indexStart = 3;
                     $loopProcess = 1;
+                    $reIndex = true;
                     $rowspan = true;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
