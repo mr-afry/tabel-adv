@@ -348,7 +348,7 @@
 
                         if ($reIndex) {
                             $noStart = ($loopProcess == 1 ? $indexStart : $endBefore);
-                            $noEnd = ($loopProcess == 1 ? ($countList == 0 ? $indexStart : $indexStart + $countList) : ($countList == 0 ? $endBefore : $endBefore + $countList - 1));
+                            $noEnd = ($loopProcess == 1 ? ($countList == 0 ? $indexStart : $indexStart + $countList - 1) : ($countList == 0 ? $endBefore : $endBefore + $countList - 1));
                             $noJadi = ($countList != 0 ? ($noStart == $noEnd ? $noStart : $noStart . ' - ' . $noEnd) : $noStart);
                         } else {
                             $noStart = ($frows['no'] == 1 ? $frows['no'] : $endBefore);
