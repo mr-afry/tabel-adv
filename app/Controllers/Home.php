@@ -65,6 +65,11 @@ class Home extends BaseController
             $hl = $frows['user_hobi'];
             $tl = $frows['user_tim'];
 
+            // echo "<pre>";
+            // print_r($tl);
+            // print_r($hl);
+            // echo "</pre>";
+
             // Get CountList
             if (count($hl) != 0 && count($tl) != 0) :
                 if (count($hl) > count($tl)) :
@@ -164,17 +169,17 @@ class Home extends BaseController
             // $sheet->setCellValue('D' . $firstNumberRow, (count($hl) > 0 ? ' ' . $hl[0]['hobi_name'] : ''));
             // $sheet->setCellValue('E' . $firstNumberRow, (count($tl) > 0 ? ' ' . $tl[0]['tim_name'] : ''));
 
-            // if (count($hl) > count($tl)) {
-            //     for ($j = 1; $j < count($hl); $j++) {
-            //         $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
-            //         $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
-            //     }
-            // } else {
-            //     for ($j = 1; $j < count($tl); $j++) {
-            //         $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
-            //         $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
-            //     }
+            // // if (count($hl) > count($tl)) {
+            // for ($j = 1; $j < count($hl); $j++) {
+            //     $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
+            //     //         $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
             // }
+            // // } else {
+            // for ($j = 1; $j < count($tl); $j++) {
+            //     //         $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
+            //     $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
+            // }
+            // // }
 
             $countRowEachBlock = $lastNumberRow + 1;
             $loopOfData++;
@@ -187,6 +192,133 @@ class Home extends BaseController
 
         // return $htmlString;
         die;
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Hobi.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit();
+    }
+
+    public function excellfinal()
+    {
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'DAFTAR HOBI');
+        $sheet->mergeCells('A1:E1');
+        $sheet->getStyle('A1:E2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:E2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A1:E2')->getFont()->setBold(true);
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Nama');
+        $sheet->setCellValue('C2', 'Alamat');
+        $sheet->setCellValue('D2', 'Hobi');
+        $sheet->setCellValue('E2', 'Tim');
+
+        $user = $this->db->query("SELECT user.user_id, user.user_name, user.user_address FROM user ORDER BY user.user_id ASC");
+        $no = 1;
+        foreach ($user->getResultArray() as $k => $u) :
+            $row['no'] = $no;
+            $row['name'] = $u['user_name'];
+            $row['address'] = $u['user_address'];
+            $row['user_hobi'] = $this->userhobi($u['user_id']);
+            $row['user_tim'] = $this->usertim($u['user_id']);
+            $list[] = $row;
+            $no++;
+        endforeach;
+
+        $loopOfData = 1;
+        $numberRowStart = 3;
+        $countRowEachBlock = 0;
+        foreach ($list as $frows) {
+            $hl = $frows['user_hobi'];
+            $tl = $frows['user_tim'];
+
+            // Get CountList
+            if (count($hl) != 0 && count($tl) != 0) :
+                if (count($hl) > count($tl)) :
+                    $countList = count($hl);
+                else :
+                    $countList = count($tl);
+                endif;
+            else :
+                $countList = 0;
+            endif;
+
+            // Get First Row Number in Block
+            if ($loopOfData == 1) :
+                $firstNumberRow = $numberRowStart;
+            else :
+                $firstNumberRow = $countRowEachBlock;
+            endif;
+
+            // Get Last/End Row Number in Block
+            if ($loopOfData == 1) :
+                if ($countList == 0) :
+                    $lastNumberRow = $numberRowStart;
+                else :
+                    $lastNumberRow = $numberRowStart + $countList - 1;
+                endif;
+            else :
+                if ($countList == 0) :
+                    $lastNumberRow = $countRowEachBlock;
+                else :
+                    $lastNumberRow = $countRowEachBlock + $countList - 1;
+                endif;
+            endif;
+
+            if ($countList != 0) :
+                if ($firstNumberRow == $lastNumberRow) :
+                    // $showRow = 'A' . $firstNumberRow;
+                    $sheet->setCellValue('A' . $firstNumberRow, $frows['no']);
+                    $sheet->setCellValue('B' . $firstNumberRow, $frows['name']);
+                    $sheet->setCellValue('C' . $firstNumberRow, $frows['address']);
+                else :
+                    $sheet->mergeCells('A' . $firstNumberRow . ':A' . $lastNumberRow);
+                    $sheet->setCellValue('A' . $firstNumberRow, $frows['no']);
+                    $sheet->getStyle('A' . $firstNumberRow . ':A' . $lastNumberRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A' . $firstNumberRow . ':A' . $lastNumberRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+                    $sheet->mergeCells('B' . $firstNumberRow . ':B' . $lastNumberRow);
+                    $sheet->setCellValue('B' . $firstNumberRow, $frows['name']);
+                    $sheet->getStyle('B' . $firstNumberRow . ':B' . $lastNumberRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('B' . $firstNumberRow . ':B' . $lastNumberRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+                    $sheet->mergeCells('C' . $firstNumberRow . ':C' . $lastNumberRow);
+                    $sheet->setCellValue('C' . $firstNumberRow, $frows['address']);
+                    $sheet->getStyle('C' . $firstNumberRow . ':C' . $lastNumberRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('C' . $firstNumberRow . ':C' . $lastNumberRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                endif;
+            else :
+                $sheet->setCellValue('A' . $firstNumberRow, $frows['no']);
+                $sheet->setCellValue('B' . $firstNumberRow, $frows['name']);
+                $sheet->setCellValue('C' . $firstNumberRow, $frows['address']);
+            endif;
+
+            $sheet->setCellValue('D' . $firstNumberRow, (count($hl) > 0 ? ' ' . $hl[0]['hobi_name'] : ''));
+            $sheet->setCellValue('E' . $firstNumberRow, (count($tl) > 0 ? ' ' . $tl[0]['tim_name'] : ''));
+
+            // if (count($hl) > count($tl)) {
+            for ($j = 1; $j < count($hl); $j++) {
+                $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
+                //         $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
+            }
+            // } else {
+            for ($j = 1; $j < count($tl); $j++) {
+                //         $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
+                $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
+            }
+            // }
+
+            $countRowEachBlock = $lastNumberRow + 1;
+            $loopOfData++;
+        }
+
+        // $htmlString = $this->_print_row1();
+
+        // return $htmlString;
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Hobi.xlsx"');
