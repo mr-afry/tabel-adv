@@ -48,62 +48,138 @@ class Home extends BaseController
             $row['address'] = $u['user_address'];
             $row['user_hobi'] = $this->userhobi($u['user_id']);
             $row['user_tim'] = $this->usertim($u['user_id']);
-            $row['key'] = $k;
-            $row['indeks_row'] = (count($row['user_hobi']) > count($row['user_tim']) ? (count($row['user_hobi']) + $row['key']) : (count($row['user_tim']) + $row['key']));
             $list[] = $row;
             $no++;
         endforeach;
 
-        echo "<pre>";
-        print_r($list);
-        echo "</pre>";
+        // echo "<pre>";
+        // print_r($list);
+        // echo "</pre>";
 
         echo "<table border='1'>";
 
-        $x = 1;
-        foreach ($list as $key => $frows) {
+        $loopOfData = 1;
+        $numberRowStart = 3;
+        $countRowEachBlock = 0;
+        foreach ($list as $frows) {
             $hl = $frows['user_hobi'];
             $tl = $frows['user_tim'];
-            $countList = count($hl) > count($tl) ? count($hl) : count($tl);
 
+            // Get CountList
+            if (count($hl) != 0 && count($tl) != 0) :
+                if (count($hl) > count($tl)) :
+                    $countList = count($hl);
+                else :
+                    $countList = count($tl);
+                endif;
+            else :
+                $countList = 0;
+            endif;
+
+            // Get First Row Number in Block
+            if ($loopOfData == 1) :
+                $firstNumberRow = $numberRowStart;
+            else :
+                $firstNumberRow = $countRowEachBlock;
+            endif;
+
+            // Get Last/End Row Number in Block
+            if ($loopOfData == 1) :
+                if ($countList == 0) :
+                    $lastNumberRow = $numberRowStart;
+                else :
+                    $lastNumberRow = $numberRowStart + $countList - 1;
+                endif;
+            else :
+                if ($countList == 0) :
+                    $lastNumberRow = $countRowEachBlock;
+                else :
+                    $lastNumberRow = $countRowEachBlock + $countList - 1;
+                endif;
+            endif;
+
+                // Print row to view (First Column Merger)
+                // if ($countList != 0) :
+                //     if ($firstNumberRow == $lastNumberRow) :
+                //         $showRow = $firstNumberRow;
+                //     else :
+                //         $showRow = $firstNumberRow . ':' . $lastNumberRow;
+                //     endif;
+                // else :
+                //     $showRow = $firstNumberRow;
+                // endif;
+
+                // countlist = 0, rowspan="0" will tells the browser to span the cell to the last row of the table section      
+            ;
             echo
-            "<tr>";
-            // ($key == 0 ? $x = $x : $x = ($x + $countList - 1));
-            // ($key == 0 ? $x = $x : ($key == 1 ? $x = ($x + 1) : $x = ($x + $countList - 1)));
+            "<tr>
+                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($countList != 0 ? ($firstNumberRow == $lastNumberRow ? 'A' . $firstNumberRow : 'A' . $firstNumberRow . ':A' . $lastNumberRow) : 'A' . $firstNumberRow) . "</td>
+                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($countList != 0 ? ($firstNumberRow == $lastNumberRow ? 'B' . $firstNumberRow : 'B' . $firstNumberRow . ':B' . $lastNumberRow) : 'B' . $firstNumberRow) . ' No. ' . ($frows['no']) . "</td>
+                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($countList != 0 ? ($firstNumberRow == $lastNumberRow ? 'C' . $firstNumberRow : 'C' . $firstNumberRow . ':C' . $lastNumberRow) : 'C' . $firstNumberRow) . ' ' . ($frows['name']) . "</td>
+                <td rowspan='" . ($countList != 0 ? $countList : '') . "'>" . ($countList != 0 ? ($firstNumberRow == $lastNumberRow ? 'D' . $firstNumberRow : 'D' . $firstNumberRow . ':D' . $lastNumberRow) : 'D' . $firstNumberRow) . ' ' . ($frows['address']) . "</td>
+                <td>" . 'E' . $firstNumberRow . (count($hl) > 0 ? ' ' . $hl[0]['hobi_name'] : '') . "</td>
+                <td>" . 'F' . $firstNumberRow . (count($tl) > 0 ? ' ' . $tl[0]['tim_name'] : '') . "</td>
+            </tr>";
 
-            // "<td " . ($countList != 0 ? "rowspan='" . $countList . "'" : "") . ">A" . $x  . ($countList != 0 ? ":A" . ($x + $countList - 1) : '') . "-" . ($frows['no']) . "</td>
-            echo "
-            <td " . ($countList != 0 ? "rowspan='" . $countList . "'" : "") . ">0" . ($frows['no']) . "</td>
-            <td " . ($countList != 0 ? "rowspan='" . $countList . "'" : "") . ">" . ($frows['name']) . "</td>
-            <td " . ($countList != 0 ? "rowspan='" . $countList . "'" : "") . ">" . ($frows['address']) . "</td>
-            <td " . ($countList != 0 ? "rowspan='" . $countList . "'" : "") . ">" . ($frows['indeks_row']) . "</td>
-            <td>" . (count($hl) > 0 ? $hl[0]['hobi_name'] : '') . "</td>
-            <td>" . (count($tl) > 0 ? $tl[0]['tim_name'] : '') . "</td>";
-            echo
-            "</tr>";
 
-            // Second Row ...
             if (count($hl) > count($tl)) {
-                // Jml Hobi > Jml Tim
                 for ($j = 1; $j < count($hl); $j++) {
                     echo
                     "<tr>
-                        <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                        <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
-                        </tr>";
+                        <td>E" . ($firstNumberRow + $j) . ($j < count($hl) ? ' ' . $hl[$j]['hobi_name'] : '') . "</td>
+                        <td>F" . ($firstNumberRow + $j) . ($j < count($tl) ? ' ' . $tl[$j]['tim_name'] : '') . "</td>
+                    </tr>";
                 }
             } else {
-                // Jml Hobi < Jml Tim
                 for ($j = 1; $j < count($tl); $j++) {
                     echo
                     "<tr>
-                        <td>" . ($j < count($hl) ? $hl[$j]['hobi_name'] : '') . "</td>
-                        <td>" . ($j < count($tl) ? $tl[$j]['tim_name'] : '') . "</td>
+                        <td>E" . ($firstNumberRow + $j) . ($j < count($hl) ? ' ' . $hl[$j]['hobi_name'] : '') . "</td>
+                        <td>F" . ($firstNumberRow + $j) . ($j < count($tl) ? ' ' . $tl[$j]['tim_name'] : '') . "</td>
                     </tr>";
                 }
             }
-            $x++;
+
+
+            // if ($countList != 0) :
+            //     if ($firstNumberRow == $lastNumberRow) :
+            //         // $showRow = 'A' . $firstNumberRow;
+            //         $sheet->setCellValue('A' . $firstNumberRow, $frows['no']);
+            //         $sheet->setCellValue('B' . $firstNumberRow, $frows['name']);
+            //         $sheet->setCellValue('C' . $firstNumberRow, $frows['address']);
+            //     else :
+            //         $sheet->mergeCells('A' . $firstNumberRow . ':A' . $lastNumberRow);
+            //         $sheet->setCellValue('A' . $firstNumberRow, $frows['no']);
+            //         $sheet->mergeCells('B' . $firstNumberRow . ':B' . $lastNumberRow);
+            //         $sheet->setCellValue('B' . $firstNumberRow, $frows['name']);
+            //         $sheet->mergeCells('C' . $firstNumberRow . ':C' . $lastNumberRow);
+            //         $sheet->setCellValue('C' . $firstNumberRow, $frows['address']);
+            //     endif;
+            // else :
+            //     $sheet->setCellValue('A' . $firstNumberRow, $frows['no']);
+            //     $sheet->setCellValue('B' . $firstNumberRow, $frows['name']);
+            //     $sheet->setCellValue('C' . $firstNumberRow, $frows['address']);
+            // endif;
+
+            // $sheet->setCellValue('D' . $firstNumberRow, (count($hl) > 0 ? ' ' . $hl[0]['hobi_name'] : ''));
+            // $sheet->setCellValue('E' . $firstNumberRow, (count($tl) > 0 ? ' ' . $tl[0]['tim_name'] : ''));
+
+            // if (count($hl) > count($tl)) {
+            //     for ($j = 1; $j < count($hl); $j++) {
+            //         $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
+            //         $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
+            //     }
+            // } else {
+            //     for ($j = 1; $j < count($tl); $j++) {
+            //         $sheet->setCellValue('D' . ($firstNumberRow + $j), $hl[$j]['hobi_name']);
+            //         $sheet->setCellValue('E' . ($firstNumberRow + $j), $tl[$j]['tim_name']);
+            //     }
+            // }
+
+            $countRowEachBlock = $lastNumberRow + 1;
+            $loopOfData++;
         }
+
         echo "</table>";
         // echo "<br><br>";
 
@@ -119,9 +195,6 @@ class Home extends BaseController
         $writer->save('php://output');
         exit();
     }
-
-
-
 
     public function excellhtml()
     {

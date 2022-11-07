@@ -336,11 +336,12 @@
                 {
                     // // $index0 = $row_data;
                     // // $loop = 0;
-                    $endBefore = 0;
-                    $indexStart = 3;
                     $loopProcess = 1;
+                    $indexStart = 3;
+                    $endBefore = 0;
+
                     $reIndex = true;
-                    $rowspan = true;
+                    $rowspan = false;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
                         $tl = $frows['tim_list'];

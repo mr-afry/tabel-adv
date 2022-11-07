@@ -446,7 +446,7 @@
                 function _print_row1($row_data)
                 {
                     $loopOfData = 1;
-                    $numberRowStart = 7;
+                    $numberRowStart = 3;
                     $countRowEachBlock = 0;
                     foreach ($row_data as $frows) {
                         $hl = $frows['hobi_list'];
@@ -470,8 +470,8 @@
                             $firstNumberRow = $countRowEachBlock;
                         endif;
 
-                        // Get Last Row Number in Block
-                        if ($firstNumberRow == 1) :
+                        // Get Last/End Row Number in Block
+                        if ($loopOfData == 1) :
                             if ($countList == 0) :
                                 $lastNumberRow = $numberRowStart;
                             else :
@@ -490,7 +490,7 @@
                             if ($firstNumberRow == $lastNumberRow) :
                                 $showRow = $firstNumberRow;
                             else :
-                                $showRow = $firstNumberRow . '-' . $lastNumberRow;
+                                $showRow = $firstNumberRow . ':' . $lastNumberRow;
                             endif;
                         else :
                             $showRow = $firstNumberRow;
